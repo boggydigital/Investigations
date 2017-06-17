@@ -1,0 +1,149 @@
+/* Start: User interface styles, won't affect benchmark results */
+
+body {
+    margin: 0;
+    background: white;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif
+}
+
+article#testCases {
+    margin: 1em;
+    margin-top: 4.5em;
+}
+
+hr {
+    margin: 1em;
+}
+
+header#results {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: inherit;
+    height: 1.5em;
+    padding: 1rem;
+    border-bottom: 1px solid silver;
+}
+
+button {
+    padding: 0.5em;
+    border: solid 2px black;
+}
+
+button:focus {
+    border-color: orange;
+    background: lightgoldenrodyellow
+}
+
+time#latestResultValue {
+    background: yellow;
+    padding: 0.5rem;
+    font-weight: 600;
+}
+
+p#queryParametersHelp {
+    background: lightgoldenrodyellow;
+    margin-left: 1rem;
+    padding: 0.5rem;
+    font-size: 0.6em;
+    font-weight: bold;
+}
+
+section h1 {
+    font-size: 1rem;
+    display: inline-block;
+    width: 15em;
+    /* should move to Grid as it hits main */
+}
+
+section button {
+    margin-right: 0.5em;
+}
+
+/* End: User interface styles, won't affect benchmark results */
+/* Start: Element styles, won't affect benchmark results */
+
+.cell {
+    display: inline-block;
+    background: blue;
+    width: 1px;
+    height: 1px;
+    margin-right: 1px;
+    vertical-align: top;
+}
+
+.column {
+    display: inline-block;
+    background: red;
+}
+
+.row {
+    background: green;
+}
+/* End: Element styles, won't affect benchmark results */
+/* Start: Style rules that affects container only, and doesn't affect children */
+
+.containerAuthorRule,
+#containerAuthorRule,
+[data-attr='containerAuthorRule'] {
+    outline: solid yellow;
+}
+
+/*containerAuthorRule~#container {
+    outline: solid yellow;
+}*/
+
+.containerAuthorRule:focus {
+    outline: solid yellow;
+}
+/* End: Style rule that affects container only, and doesn't affect children */
+
+/* Start: Style rules that affect row - this is sub-case for container */
+
+.rowAuthorRule .row,
+#rowAuthorRule .row,
+[data-attr='rowAuthorRule'] .row {
+    outline: solid cyan;
+}
+
+/*rowAuthorRule~#container .row {
+    outline: solid cyan;
+}*/
+
+.rowAuthorRule:focus .row {
+    outline: solid cyan;
+}
+
+/* End: Style rules that affect rows - sub-case for container */
+
+/* Start: Style rules that affect columns - sub-case for containers */
+
+.columnAuthorRule .column,
+#columnAuthorRule .column,
+[data-attr='column'] .column {
+    outline: solid pink;
+}
+
+.columnAuthorRule:focus .column {
+    outline: solid pink;
+}
+
+/* End: Style rules that affect columns - sub-case for containers */
+
+/* Start: Style rules that affect cells */
+
+.cellAuthorRule .cell,
+#cellAuthorRule .cell,
+[data-attr='cellAuthorRule'] .cell {
+    background: orange;
+}
+
+/*childAuthorRule~#container .cell {
+    background: orange;
+}*/
+
+.cellAuthorRule:focus .cell {
+    background: orange;
+}
+/* End: Style rule that affects cells */
