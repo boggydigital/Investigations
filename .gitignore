@@ -2,4 +2,4 @@
 # This .gitignore file was automatically created by Microsoft(R) Visual Studio.
 ################################################################################
 
-/Edge_Formatting_setThenRemoveAttribute-rowAuthorRule.html
+/E*.html
