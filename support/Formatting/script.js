@@ -37,7 +37,8 @@ sectionNamesMap.set("setThenClearId", "Set and clear #id");
 sectionNamesMap.set("setAttributeValue", "Set [attribute=value]");
 sectionNamesMap.set("setThenRemoveAttribute", "Set and remove [attribute]");
 sectionNamesMap.set("focus", "focus()");
-sectionNamesMap.set("setCssTextSame", "Set cssText to the same value");
+sectionNamesMap.set("setCssTextSame", "Set .cssText to the same value");
+sectionNamesMap.set("setNodeValueSame", "Set .nodeValue to the same value");
 
 let createControlPanel = function () {
     let articleTestCases = document.querySelector("article#testCases");
@@ -162,6 +163,12 @@ let setCssTextSame = (context) => {
     cell.offsetHeight;
 }
 
+let setNodeValueSame = (context) => {
+    let element = getElementByContext(context);
+    element.nodeValue = element.nodeValue;
+    cell.offsetHeight; 
+}
+
 let actionsMap = new Map();
 actionsMap.set("addClass", addClass);
 actionsMap.set("addThenRemoveClass", addThenRemoveClass);
@@ -173,6 +180,7 @@ actionsMap.set("insertThenRemoveChild", insertThenRemoveChild);
 actionsMap.set("insertBefore", insertBefore);
 actionsMap.set("focus", focus);
 actionsMap.set("setCssTextSame", setCssTextSame);
+actionsMap.set("setNodeValueSame", setNodeValueSame);
 
 let addButtonsEventListeners = function () {
     let buttons = document.querySelectorAll("button");
@@ -182,4 +190,4 @@ let addButtonsEventListeners = function () {
                 e.target.setAttribute("disabled", "disabled");
             runTestCase(e.target.parentNode.id, e.target.textContent, true);
         });
-}
+};

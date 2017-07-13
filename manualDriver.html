@@ -11,8 +11,7 @@
         <span>Latest result</span>
         <time id="latestResultValue">0.0</time>
     </header>
-    <article id="testCases" 
-        data-sections="addClass,addThenRemoveClass,setId,setThenClearId,setAttributeValue,setThenRemoveAttribute,focus,setCssTextSame"
+    <article id="testCases" data-sections="addClass,addThenRemoveClass,setId,setThenClearId,setAttributeValue,setThenRemoveAttribute,focus,setCssTextSame"
         data-buttons="noAuthorRule,containerAuthorRule,rowAuthorRule,columnAuthorRule,cellAuthorRule">
     </article>
 
@@ -22,9 +21,11 @@
     <script src="support/Formatting/script.js"></script>
 
     <script>
-        createInitialStructure(50, 50, 50);
-        createControlPanel();
-        addButtonsEventListeners();
+        document.addEventListener("DOMContentLoaded", () => {
+            createInitialStructure(50, 50, 50);
+            createControlPanel();
+            addButtonsEventListeners();
+        });
     </script>
 </body>
 
