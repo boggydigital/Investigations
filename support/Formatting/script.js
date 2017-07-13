@@ -166,9 +166,9 @@ let focus = (context) => {
 }
 
 let setCssTextSame = (context) => {
-    let element = getElementsByContext(context);
+    let elements = getElementsByContext(context);
     for (var i = 0; i < elements.length; ++i) {
-        elements[i].style.cssText = element[i].style.cssText;
+        elements[i].style.cssText = elements[i].style.cssText;
     }
     cell.offsetHeight;
 }
