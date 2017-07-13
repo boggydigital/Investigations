@@ -2,7 +2,7 @@ let $ = function(id) { return document.getElementById(id);}
 
 let container = $("container");
 let latestResultValue = $("latestResultValue");
-let column, row, cell, firstRow;
+let column, row, cell, allCells, allTextNodes;
 
 let createInitialStructure = function (rows, columns, cells) {
 
@@ -15,6 +15,7 @@ let createInitialStructure = function (rows, columns, cells) {
             for (let cc = 0; cc < cells; cc++) {
                 let testCell = document.createElement("div");
                 testCell.className = "cell";// + (rr * rows + cl * columns + cc);
+                testCell.innerText = " ";
                 testColumn.appendChild(testCell);
             }
             testRow.appendChild(testColumn);
@@ -25,6 +26,11 @@ let createInitialStructure = function (rows, columns, cells) {
     column = container.querySelector(".column");
     row = container.querySelector(".row");
     cell = container.querySelector(".cell");
+    allCells = container.querySelectorAll(".cell");
+    allTextNodes = [];
+    for (var i = 0; i < allCells.length; ++i) {
+        allTextNodes.push(allCells[i].firstChild);
+    }
 }
 
 // createInitialStructure(50, 50, 50);
@@ -94,13 +100,15 @@ let runTestCase = function (testAction, testParam, manualRun) {
     return elapsed;
 }
 
-let getElementByContext = (context) => {
+let getElementsByContext = (context) => {
     switch (context) {
-        case "noAuthorRule": return document.body; // this is redundant in this case, but added just for consistency
-        case "containerAuthorRule": return container; 
-        case "rowAuthorRule": return row;
-        case "columnAuthorRule": return column; 
-        case "cellAuthorRule": return cell; 
+        case "noAuthorRule": return [document.body]; // this is redundant in this case, but added just for consistency
+        case "containerAuthorRule": return [container]; 
+        case "rowAuthorRule": return [row];
+        case "columnAuthorRule": return [column]; 
+        case "cellAuthorRule": return [cell]; 
+        case "allCellsAuthorRule": return allCells; 
+        case "allTextsAuthorRule": return allTextNodes;
     }
 }
 
@@ -158,14 +166,18 @@ let focus = (context) => {
 }
 
 let setCssTextSame = (context) => {
-    let element = getElementByContext(context);
-    element.style.cssText = element.style.cssText;
+    let element = getElementsByContext(context);
+    for (var i = 0; i < elements.length; ++i) {
+        elements[i].style.cssText = element[i].style.cssText;
+    }
     cell.offsetHeight;
 }
 
 let setNodeValueSame = (context) => {
-    let element = getElementByContext(context);
-    element.nodeValue = element.nodeValue;
+    let elements = getElementsByContext(context);
+    for (var i = 0; i < elements.length; ++i) {
+        elements[i].nodeValue = elements[i].nodeValue;
+    }
     cell.offsetHeight; 
 }
 
