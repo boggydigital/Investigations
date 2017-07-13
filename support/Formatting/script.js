@@ -2,7 +2,7 @@ let $ = function(id) { return document.getElementById(id);}
 
 let container = $("container");
 let latestResultValue = $("latestResultValue");
-let cell, firstRow;
+let column, row, cell, firstRow;
 
 let createInitialStructure = function (rows, columns, cells) {
 
@@ -22,6 +22,8 @@ let createInitialStructure = function (rows, columns, cells) {
         container.appendChild(testRow);
     }
 
+    column = container.querySelector(".column");
+    row = container.querySelector(".row");
     cell = container.querySelector(".cell");
 }
 
@@ -35,6 +37,7 @@ sectionNamesMap.set("setThenClearId", "Set and clear #id");
 sectionNamesMap.set("setAttributeValue", "Set [attribute=value]");
 sectionNamesMap.set("setThenRemoveAttribute", "Set and remove [attribute]");
 sectionNamesMap.set("focus", "focus()");
+sectionNamesMap.set("setCssTextSame", "Set cssText to the same value");
 
 let createControlPanel = function () {
     let articleTestCases = document.querySelector("article#testCases");
@@ -56,7 +59,6 @@ let createControlPanel = function () {
         articleTestCases.appendChild(section);
     });
 }
-
 
 let cleanupAfterTestCase = () => {
     container.className = "";
@@ -89,6 +91,16 @@ let runTestCase = function (testAction, testParam, manualRun) {
     }
 
     return elapsed;
+}
+
+let getElementByContext = (context) => {
+    switch (context) {
+        case "noAuthorRule": return document.body; // this is redundant in this case, but added just for consistency
+        case "containerAuthorRule": return container; 
+        case "rowAuthorRule": return row;
+        case "columnAuthorRule": return column; 
+        case "cellAuthorRule": return cell; 
+    }
 }
 
 let addClass = (cl) => {
@@ -144,6 +156,12 @@ let focus = (context) => {
     cell.offsetHeight;
 }
 
+let setCssTextSame = (context) => {
+    let element = getElementByContext(context);
+    element.style.cssText = element.style.cssText;
+    cell.offsetHeight;
+}
+
 let actionsMap = new Map();
 actionsMap.set("addClass", addClass);
 actionsMap.set("addThenRemoveClass", addThenRemoveClass);
@@ -154,6 +172,7 @@ actionsMap.set("setThenRemoveAttribute", setThenRemoveAttribute);
 actionsMap.set("insertThenRemoveChild", insertThenRemoveChild);
 actionsMap.set("insertBefore", insertBefore);
 actionsMap.set("focus", focus);
+actionsMap.set("setCssTextSame", setCssTextSame);
 
 let addButtonsEventListeners = function () {
     let buttons = document.querySelectorAll("button");
