@@ -1,7 +1,10 @@
-let $ = function(id) { return document.getElementById(id);}
+let $ = function (id) { return document.getElementById(id); }
 
 let container = $("container");
 let latestResultValue = $("latestResultValue");
+let articleTestCases = document.querySelector("article#testCases");
+let sections = articleTestCases.getAttribute("data-sections").split(",");
+let buttons = articleTestCases.getAttribute("data-buttons").split(",");
 let column, row, cell, firstRow;
 
 let createInitialStructure = function (rows, columns, cells) {
@@ -28,8 +31,6 @@ let createInitialStructure = function (rows, columns, cells) {
     cell = container.querySelector(".cell");
 }
 
-// createInitialStructure(50, 50, 50);
-
 let sectionNamesMap = new Map();
 sectionNamesMap.set("addClass", "Add .class");
 sectionNamesMap.set("addThenRemoveClass", "Add and remove .class");
@@ -41,10 +42,6 @@ sectionNamesMap.set("focus", "focus()");
 sectionNamesMap.set("setCssTextSame", "Set .cssText to the same value");
 
 let createControlPanel = function () {
-    let articleTestCases = document.querySelector("article#testCases");
-    let sections = articleTestCases.getAttribute("data-sections").split(",");
-    let buttons = articleTestCases.getAttribute("data-buttons").split(",");
-
     sections.forEach(s => {
         let section = document.createElement("section");
         section.id = s;
@@ -77,7 +74,7 @@ let cleanupAfterTestCase = () => {
 }
 
 let runTestCase = function (testAction, testParam, manualRun) {
-    
+
     let start = performance.now();
     let action = actionsMap.get(testAction);
     if (!action) alert("Test case not found, make sure it's added to actionsMap!");
@@ -97,10 +94,10 @@ let runTestCase = function (testAction, testParam, manualRun) {
 let getElementByContext = (context) => {
     switch (context) {
         case "noAuthorRule": return document.body; // this is redundant in this case, but added just for consistency
-        case "containerAuthorRule": return container; 
+        case "containerAuthorRule": return container;
         case "rowAuthorRule": return row;
-        case "columnAuthorRule": return column; 
-        case "cellAuthorRule": return cell; 
+        case "columnAuthorRule": return column;
+        case "cellAuthorRule": return cell;
     }
 }
 
@@ -175,12 +172,28 @@ actionsMap.set("insertBefore", insertBefore);
 actionsMap.set("focus", focus);
 actionsMap.set("setCssTextSame", setCssTextSame);
 
+let moab = function () {
+    let totalElapsed = 0;
+    latestResultValue.textContent = "Please wait running MOAB...";
+    setTimeout(() => {
+        sections.forEach(s => {
+            buttons.forEach(b => {
+                if (b !== "cellAuthorRule")
+                    totalElapsed += runTestCase(s, b, true);
+            });
+        });
+        latestResultValue.textContent = totalElapsed;
+    }, 100);
+}
+
 let addButtonsEventListeners = function () {
     let buttons = document.querySelectorAll("button");
     for (let ii = 0; ii < buttons.length; ii++)
         buttons[ii].addEventListener("click", function (e) {
-            if (e.target.getAttribute("data-once"))
-                e.target.setAttribute("disabled", "disabled");
+            if (e.target.textContent === "MOAB") {
+                moab();
+                return;
+            }
             runTestCase(e.target.parentNode.id, e.target.textContent, true);
         });
 };
