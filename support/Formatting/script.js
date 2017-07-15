@@ -14,6 +14,7 @@ let createInitialStructure = function (rows, columns, cells) {
             testColumn.className = "column";
             for (let cc = 0; cc < cells; cc++) {
                 let testCell = document.createElement("div");
+                // testCell.textContent = (rr * rows + cl * columns + cc);
                 testCell.className = "cell";// + (rr * rows + cl * columns + cc);
                 testColumn.appendChild(testCell);
             }
@@ -38,7 +39,6 @@ sectionNamesMap.set("setAttributeValue", "Set [attribute=value]");
 sectionNamesMap.set("setThenRemoveAttribute", "Set and remove [attribute]");
 sectionNamesMap.set("focus", "focus()");
 sectionNamesMap.set("setCssTextSame", "Set .cssText to the same value");
-sectionNamesMap.set("setNodeValueSame", "Set .nodeValue to the same value");
 
 let createControlPanel = function () {
     let articleTestCases = document.querySelector("article#testCases");
@@ -163,12 +163,6 @@ let setCssTextSame = (context) => {
     cell.offsetHeight;
 }
 
-let setNodeValueSame = (context) => {
-    let element = getElementByContext(context);
-    element.nodeValue = element.nodeValue;
-    cell.offsetHeight; 
-}
-
 let actionsMap = new Map();
 actionsMap.set("addClass", addClass);
 actionsMap.set("addThenRemoveClass", addThenRemoveClass);
@@ -180,7 +174,6 @@ actionsMap.set("insertThenRemoveChild", insertThenRemoveChild);
 actionsMap.set("insertBefore", insertBefore);
 actionsMap.set("focus", focus);
 actionsMap.set("setCssTextSame", setCssTextSame);
-actionsMap.set("setNodeValueSame", setNodeValueSame);
 
 let addButtonsEventListeners = function () {
     let buttons = document.querySelectorAll("button");
