@@ -174,15 +174,19 @@ actionsMap.set("setCssTextSame", setCssTextSame);
 
 let moab = function () {
     let totalElapsed = 0;
+    let resultsTable = {};
     latestResultValue.textContent = "Please wait running MOAB...";
     setTimeout(() => {
         sections.forEach(s => {
+            resultsTable[s] = {};
             buttons.forEach(b => {
-                if (b !== "cellAuthorRule")
-                    totalElapsed += runTestCase(s, b, true);
+                let latestResult = runTestCase(s, b, true);
+                resultsTable[s][b] = latestResult;
+                totalElapsed += latestResult;
             });
         });
         latestResultValue.textContent = totalElapsed;
+        console.table(resultsTable);
     }, 100);
 }
 
