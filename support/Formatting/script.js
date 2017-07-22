@@ -40,6 +40,7 @@ sectionNamesMap.set("setAttributeValue", "Set [attribute=value]");
 sectionNamesMap.set("setThenRemoveAttribute", "Set and remove [attribute]");
 sectionNamesMap.set("focus", "focus()");
 sectionNamesMap.set("setCssTextSame", "Set .cssText to the same value");
+sectionNamesMap.set("setTransformThenGetTransformOrigin", "Set transform and get transformOrigin");
 
 let createControlPanel = function () {
     sections.forEach(s => {
@@ -58,19 +59,28 @@ let createControlPanel = function () {
     });
 }
 
-let cleanupAfterTestCase = () => {
-    container.className = "";
+let getClassByContext = (context) => {
+    switch (context) {
+        case "noAuthorRule": return ""; // this is redundant in this case, but added just for consistency
+        case "containerAuthorRule": return "container";
+        case "rowAuthorRule": return "row";
+        case "columnAuthorRule": return "column";
+        case "cellAuthorRule": return "cell";
+    }
+}
+
+let cleanupAfterTestCase = (context) => {
+    let element = getElementByContext(context);
+    element.className = getClassByContext(context);
+    element.id = "";
+    element.removeAttribute("data-attr");
+    element.style.transform = "";
+
     container.id = "container";
+    container.className = "";
     container.removeAttribute("data-attr");
-    container.offsetHeight;
-    var elements = ["noAuthorRule", "containerAuthorRule", "childAuthorRule"];
-    elements.forEach(e => {
-        var element = container.parentElement;
-        while (element) {
-            element = container.parentElement.querySelector(e);
-            if (element) container.parentElement.removeChild(element);
-        }
-    })
+
+    element.offsetHeight;
 }
 
 let runTestCase = function (testAction, testParam, manualRun) {
@@ -84,7 +94,7 @@ let runTestCase = function (testAction, testParam, manualRun) {
     let elapsed = performance.now() - start;
 
     if (manualRun) {
-        cleanupAfterTestCase();
+        cleanupAfterTestCase(testParam);
         latestResultValue.textContent = elapsed;
     }
 
@@ -160,6 +170,14 @@ let setCssTextSame = (context) => {
     cell.offsetHeight;
 }
 
+let setTransformThenGetTransformOrigin = (context) => {
+    let element = getElementByContext(context);
+    for (var ii = 0; ii < 10; ii++) {
+        element.style["transform"] = "matrix3d(" + Math.random() + ",0,0,0,0,1,0,0,0,0,1,0,0,0,0,1)";
+        getComputedStyle(element)["transformOrigin"];
+    }
+}
+
 let actionsMap = new Map();
 actionsMap.set("addClass", addClass);
 actionsMap.set("addThenRemoveClass", addThenRemoveClass);
@@ -171,6 +189,7 @@ actionsMap.set("insertThenRemoveChild", insertThenRemoveChild);
 actionsMap.set("insertBefore", insertBefore);
 actionsMap.set("focus", focus);
 actionsMap.set("setCssTextSame", setCssTextSame);
+actionsMap.set("setTransformThenGetTransformOrigin", setTransformThenGetTransformOrigin);
 
 let moab = function () {
     let totalElapsed = 0;
