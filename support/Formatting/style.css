@@ -14,13 +14,8 @@ article#testCases {
     margin: 1em;
 }
 
-hr {
-    margin: 1em;
-}
-
 header#results {
     background: inherit;
-    height: 1.5em;
     padding: 1rem;
 }
 
@@ -29,24 +24,25 @@ header #generationsLabel {
 }
 
 header #generationsControls label {
-    padding: 0 0.25em;
+    padding: 0.25em;
 }
 
 button {
     padding: 0.5em;
     border: solid 2px black;
+    border-radius: 2px;
 }
 
-button:focus {
-    border-color: orange;
-    background: lightgoldenrodyellow
+#latestResult {
+    line-height: 2;
 }
 
 time#latestResultValue {
     background: black;
     color: white;
-    padding: 0.5rem;
+    padding: 0.25rem; 
     font-weight: 600;
+    font-size: 1.75em;
 }
 
 p#queryParametersHelp {
@@ -57,7 +53,7 @@ p#queryParametersHelp {
     font-weight: bold;
 }
 
-section h1 {
+h1 {
     font-size: 1rem;
     display: inline-block;
     width: 15em;
@@ -65,7 +61,24 @@ section h1 {
 }
 
 section button {
-    margin-right: 0.5em;
+     margin-right: 1em; 
+}
+
+table th {
+    padding: 1em;
+}
+table td {
+    text-align: center;
+}
+
+table td:last-child {
+    font-weight: bold;
+    background: gray;
+    color: white;
+}
+
+table tr:nth-child(even) {
+    background: silver;
 }
 
 /* End: User interface styles, won't affect benchmark results */

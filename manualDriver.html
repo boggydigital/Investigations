@@ -8,18 +8,18 @@
 
 <body>
     <header id="results">
-        <span id="generationsLabel">Generations:</span>
+        <h1 id="generationsLabel">Generations:</h1>
         <span id="generationsControls"></span>
         <button id="runAll">Run all cases for selected generation(s)</button>
-        <span>Latest result</span>
-        <time id="latestResultValue">0.0</time>
-        <!-- <a href="#">Show results table...</a> -->
+        <section id="latestResult">
+            <h1>Latest result</h1>
+            <time id="latestResultValue">0.0</time>
+        </section>
+        <table id="detailedRunAllResults"></table>
     </header>
     <article id="testCases" data-sections="addClass,addThenRemoveClass,setId,setThenClearId,setAttributeValue,setThenRemoveAttribute,focus,setCssTextSame,setTransformThenGetTransformOrigin"
         data-buttons="noAuthorRule,containerAuthorRule,rowAuthorRule,columnAuthorRule,cellAuthorRule">
     </article>
-
-    <hr />
 
     <div id="container" tabindex="0"></div>
     <script src="support/Formatting/script.js"></script>

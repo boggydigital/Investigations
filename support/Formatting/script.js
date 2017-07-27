@@ -2,6 +2,7 @@ let $ = function (id) { return document.getElementById(id); }
 
 let container = $("container");
 let latestResultValue = $("latestResultValue");
+let detailedRunAllResults = $("detailedRunAllResults");
 let articleTestCases = document.querySelector("article#testCases");
 let sections = articleTestCases.getAttribute("data-sections").split(",");
 let buttons = articleTestCases.getAttribute("data-buttons").split(",");
@@ -78,7 +79,7 @@ let runTestCase = function (testAction, testParam, manualRun) {
 
     if (manualRun) {
         cleanupAfterTestCase(testParam);
-        latestResultValue.textContent = elapsed;
+        latestResultValue.textContent = elapsed.toFixed(2);
     }
 
     return elapsed;
@@ -249,10 +250,53 @@ let runAll = function () {
                 totalElapsed += latestResult;
             }
         }
-        latestResultValue.textContent = totalElapsed;
+        latestResultValue.textContent = totalElapsed.toFixed(2);
         // TODO: replace this with DOM output
-        console.table(resultsTable);
+        outputRunAllResultsTable(resultsTable);
     }, 100);
+}
+
+let outputRunAllResultsTable = function (data) {
+    let columnsCreated = false;
+    detailedRunAllResults.innerHTML = "";
+
+    for (let row in data) {
+        if (!columnsCreated) {
+            let tableHead = document.createElement("thead");
+            tableHead.appendChild(document.createElement("th"))
+            for (let column in data[row]) {
+                let columnHeader = document.createElement("th");
+                columnHeader.innerHTML = column;
+                tableHead.appendChild(columnHeader);
+            }
+            let sumHeader = document.createElement("th");
+            sumHeader.textContent = "SUM";
+            tableHead.appendChild(sumHeader);
+
+            detailedRunAllResults.appendChild(tableHead);
+            columnsCreated = true;
+        }
+
+        let tableRow = document.createElement("tr");
+        let tableRowTitle = document.createElement("td");
+        tableRowTitle.innerHTML = "<h1>" + sectionNamesMap.get(row) + "</h1>";
+        tableRowTitle.classList.add("gen" + generationsMap.get(row));
+        tableRow.appendChild(tableRowTitle);
+
+        let columnTotal = 0;
+        for (let column in data[row]) {
+            columnTotal += data[row][column];
+            let tableRowColumnValue = document.createElement("td");
+            tableRowColumnValue.textContent = data[row][column].toFixed(2);
+            tableRow.appendChild(tableRowColumnValue);
+        }
+
+        let sumColumnRow = document.createElement("td");
+        sumColumnRow.textContent = columnTotal.toFixed(2);
+        tableRow.appendChild(sumColumnRow);
+
+        detailedRunAllResults.appendChild(tableRow);
+    }
 }
 
 let addButtonsEventListeners = function () {
@@ -264,6 +308,7 @@ let addButtonsEventListeners = function () {
                 return;
             }
             runTestCase(e.target.parentNode.id, e.target.textContent, true);
+            detailedRunAllResults.innerHTML = "";
         });
 };
 
