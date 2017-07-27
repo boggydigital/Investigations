@@ -8,9 +8,12 @@
 
 <body>
     <header id="results">
-        <button>MOAB</button>
+        <span id="generationsLabel">Generations:</span>
+        <span id="generationsControls"></span>
+        <button id="runAll">Run all cases for selected generation(s)</button>
         <span>Latest result</span>
         <time id="latestResultValue">0.0</time>
+        <!-- <a href="#">Show results table...</a> -->
     </header>
     <article id="testCases" data-sections="addClass,addThenRemoveClass,setId,setThenClearId,setAttributeValue,setThenRemoveAttribute,focus,setCssTextSame,setTransformThenGetTransformOrigin"
         data-buttons="noAuthorRule,containerAuthorRule,rowAuthorRule,columnAuthorRule,cellAuthorRule">
@@ -23,9 +26,16 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", () => {
-            createInitialStructure(50, 50, 50);
-            createControlPanel();
-            addButtonsEventListeners();
+
+            let consistencyReport = checkBasicConsistency();
+            if (consistencyReport) {
+                alert(consistencyReport);
+            } else {
+                createInitialStructure(50, 50, 50);
+                createTestCasesControlPanel();
+                createGenerationsControls([1]); // only run generation 1 tests by default
+                addButtonsEventListeners();
+            }
         });
     </script>
 </body>

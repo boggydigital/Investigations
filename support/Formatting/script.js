@@ -42,23 +42,6 @@ sectionNamesMap.set("focus", "focus()");
 sectionNamesMap.set("setCssTextSame", "Set .cssText to the same value");
 sectionNamesMap.set("setTransformThenGetTransformOrigin", "Set transform and get transformOrigin");
 
-let createControlPanel = function () {
-    sections.forEach(s => {
-        let section = document.createElement("section");
-        section.id = s;
-        let header = document.createElement("h1");
-        header.textContent = sectionNamesMap.get(s);
-        section.appendChild(header);
-
-        buttons.forEach(b => {
-            let button = document.createElement("button");
-            button.textContent = b;
-            section.appendChild(button);
-        });
-        articleTestCases.appendChild(section);
-    });
-}
-
 let getClassByContext = (context) => {
     switch (context) {
         case "noAuthorRule": return ""; // this is redundant in this case, but added just for consistency
@@ -144,19 +127,19 @@ let setThenRemoveAttribute = (val) => {
     cell.offsetHeight;
 }
 
-let insertThenRemoveChild = (context) => {
-    insertBefore(context);
-    cell.offsetHeight;
-    var element = container.parentNode.querySelector(context);
-    container.parentNode.removeChild(element);
-    cell.offsetHeight;
-}
+// let insertThenRemoveChild = (context) => {
+//     insertBefore(context);
+//     cell.offsetHeight;
+//     var element = container.parentNode.querySelector(context);
+//     container.parentNode.removeChild(element);
+//     cell.offsetHeight;
+// }
 
-let insertBefore = (context) => {
-    let newNode = document.createElement(context);
-    container.parentNode.insertBefore(newNode, container);
-    cell.offsetHeight;
-}
+// let insertBefore = (context) => {
+//     let newNode = document.createElement(context);
+//     container.parentNode.insertBefore(newNode, container);
+//     cell.offsetHeight;
+// }
 
 let focus = (context) => {
     addClass(context);
@@ -185,26 +168,89 @@ actionsMap.set("setId", setId);
 actionsMap.set("setThenClearId", setThenClearId);
 actionsMap.set("setAttributeValue", setAttributeValue);
 actionsMap.set("setThenRemoveAttribute", setThenRemoveAttribute);
-actionsMap.set("insertThenRemoveChild", insertThenRemoveChild);
-actionsMap.set("insertBefore", insertBefore);
 actionsMap.set("focus", focus);
 actionsMap.set("setCssTextSame", setCssTextSame);
 actionsMap.set("setTransformThenGetTransformOrigin", setTransformThenGetTransformOrigin);
 
-let moab = function () {
+let generationsMap = new Map();
+generationsMap.set("addClass", 1);
+generationsMap.set("addThenRemoveClass", 1);
+generationsMap.set("setId", 1);
+generationsMap.set("setThenClearId", 1);
+generationsMap.set("setAttributeValue", 1);
+generationsMap.set("setThenRemoveAttribute", 1);
+generationsMap.set("focus", 1);
+generationsMap.set("setCssTextSame", 2);
+generationsMap.set("setTransformThenGetTransformOrigin", 2);
+
+let createGenerationsControls = function (selected) {
+    let generations = [];
+    let generationsControls = $("generationsControls");
+    for (let value of generationsMap.values())
+        if (generations.indexOf(value) === -1) generations.push(value);
+
+    generations.forEach(generation => {
+        let generationId = "gen" + generation;
+        let generationLabel = document.createElement("label");
+        generationLabel.textContent = generation;
+        generationLabel.classList.add(generationId);
+        let generationCheckbox = document.createElement("input");
+        generationCheckbox.type = "checkbox";
+        if (selected.indexOf(generation) > -1) generationCheckbox.checked = true;
+        generationCheckbox.id = generationId;
+        generationCheckbox.setAttribute("data-generation", generation);
+        generationLabel.appendChild(generationCheckbox);
+        generationsControls.appendChild(generationLabel);
+    })
+}
+
+let createTestCasesControlPanel = function () {
+    sections.forEach(s => {
+        let section = document.createElement("section");
+        section.id = s;
+        let header = document.createElement("h1");
+        header.textContent = sectionNamesMap.get(s);
+        section.appendChild(header);
+        let generation = generationsMap.get(s);
+
+        buttons.forEach(b => {
+            let button = document.createElement("button");
+            button.textContent = b;
+            button.classList.add("gen" + generation);
+            section.appendChild(button);
+        });
+        articleTestCases.appendChild(section);
+    });
+}
+
+let getSelectedGenerations = function () {
+    let generations = [];
+    let generationCheckboxes = document.querySelectorAll("#generationsControls input[type='checkbox']");
+
+    for (let checkbox of generationCheckboxes)
+        if (checkbox.checked) generations.push(parseInt(checkbox.getAttribute("data-generation")));
+
+    return generations;
+}
+
+let runAll = function () {
+    let generations = getSelectedGenerations();
     let totalElapsed = 0;
     let resultsTable = {};
-    latestResultValue.textContent = "Please wait running MOAB...";
+    latestResultValue.textContent = "Please wait running all cases for selected generation(s)...";
     setTimeout(() => {
-        sections.forEach(s => {
-            resultsTable[s] = {};
-            buttons.forEach(b => {
-                let latestResult = runTestCase(s, b, true);
-                resultsTable[s][b] = latestResult;
+        for (let section of sections) {
+            let testCaseGeneration = generationsMap.get(section);
+            if (generations.indexOf(testCaseGeneration) === -1) continue;
+            resultsTable[section] = {};
+            for (let button of buttons) {
+                let latestResult = runTestCase(section, button, true);
+                resultsTable[section][button] = latestResult;
                 totalElapsed += latestResult;
-            });
-        });
+            }
+        }
         latestResultValue.textContent = totalElapsed;
+        // TODO: replace this with DOM output
         console.table(resultsTable);
     }, 100);
 }
@@ -213,10 +259,23 @@ let addButtonsEventListeners = function () {
     let buttons = document.querySelectorAll("button");
     for (let ii = 0; ii < buttons.length; ii++)
         buttons[ii].addEventListener("click", function (e) {
-            if (e.target.textContent === "MOAB") {
-                moab();
+            if (e.target.id === "runAll") {
+                runAll();
                 return;
             }
             runTestCase(e.target.parentNode.id, e.target.textContent, true);
         });
 };
+
+let checkBasicConsistency = function () {
+    let length = sectionNamesMap.size;
+    if (actionsMap.size !== length ||
+        generationsMap.size !== length)
+        return "actionsMap or generationsMap size is differnt from sectionNamesMap size.\n" +
+            "Did you add new case to all of the maps?";
+
+    for (let key of sectionNamesMap.keys()) {
+        if (!actionsMap.get(key)) return "actionsMap doesn't contain " + key;
+        if (!generationsMap.get(key)) return "generationsMap doesn't contain " + key;
+    }
+}

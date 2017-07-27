@@ -1,14 +1,17 @@
 /* Start: User interface styles, won't affect benchmark results */
 
+html {
+    font-size: 14px
+}
+
 body {
     margin: 0;
     background: white;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 article#testCases {
     margin: 1em;
-    margin-top: 4.5em;
 }
 
 hr {
@@ -16,14 +19,17 @@ hr {
 }
 
 header#results {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
     background: inherit;
     height: 1.5em;
     padding: 1rem;
-    border-bottom: 1px solid silver;
+}
+
+header #generationsLabel {
+    font-weight: bold;
+}
+
+header #generationsControls label {
+    padding: 0 0.25em;
 }
 
 button {
@@ -37,7 +43,8 @@ button:focus {
 }
 
 time#latestResultValue {
-    background: yellow;
+    background: black;
+    color: white;
     padding: 0.5rem;
     font-weight: 600;
 }
@@ -62,6 +69,22 @@ section button {
 }
 
 /* End: User interface styles, won't affect benchmark results */
+/* Start: Generations styling, won't affect benchmark results */
+
+.gen1 {
+    background: red;
+    color: white;
+}
+
+.gen2 {
+    background: orange;
+}
+
+.gen3 {
+    background: yellow;
+}
+
+/* End: Generations styling, won't affect benchmark results */
 /* Start: Element styles, won't affect benchmark results */
 
 .cell {
@@ -75,11 +98,11 @@ section button {
 
 .column {
     display: inline-block;
-    background: red;
+    background: gray;
 }
 
 .row {
-    background: green;
+    background: darkgray;
 }
 /* End: Element styles, won't affect benchmark results */
 /* Start: Style rules that affects container only, and doesn't affect children */
@@ -136,7 +159,7 @@ section button {
 .cellAuthorRule .cell,
 #cellAuthorRule .cell,
 [data-attr='cellAuthorRule'] .cell {
-    background: orange;
+    background: black;
 }
 
 /*childAuthorRule~#container .cell {
@@ -144,6 +167,6 @@ section button {
 }*/
 
 .cellAuthorRule:focus .cell {
-    background: orange;
+    background: black;
 }
 /* End: Style rule that affects cells */
