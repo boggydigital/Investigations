@@ -230,9 +230,10 @@ let getSelectedGenerations = function () {
     let generations = [];
     let generationCheckboxes = document.querySelectorAll("#generationsControls input[type='checkbox']");
 
-    generationCheckboxes.forEach(checkbox => {
+    for (let cc = 0; cc < generationCheckboxes.length; cc++) {
+        let checkbox = generationCheckboxes[cc];
         if (checkbox.checked) generations.push(parseInt(checkbox.getAttribute("data-generation")));
-    });
+    }
 
     return generations;
 }
