@@ -188,12 +188,12 @@ generationsMap.set("addClass", 1);
 generationsMap.set("addThenRemoveClass", 1);
 generationsMap.set("setId", 1);
 generationsMap.set("setThenClearId", 1);
-generationsMap.set("setAttributeValue", 1);
-generationsMap.set("setThenRemoveAttribute", 1);
 generationsMap.set("focus", 1);
 generationsMap.set("pseudoElementFocus", 1);
-generationsMap.set("setCssTextSame", 2);
-generationsMap.set("setTransformThenGetTransformOrigin", 2);
+generationsMap.set("setAttributeValue", 2);
+generationsMap.set("setThenRemoveAttribute", 2);
+generationsMap.set("setCssTextSame", 3);
+generationsMap.set("setTransformThenGetTransformOrigin", 3);
 
 let createGenerationsControls = function (selected) {
     let generations = [];
@@ -274,7 +274,7 @@ let runAll = function () {
                         resultsTable[section][button] = latestResult;
                         totalElapsed += latestResult;
                     }
-                    
+
                 })
             }
         })
