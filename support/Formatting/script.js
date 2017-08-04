@@ -66,8 +66,8 @@ let cleanupAfterTestCase = (context) => {
     container.removeAttribute("data-attr");
 
     let additionalStyles = document.head.querySelectorAll("style");
-	for (var ss = 0; ss < additionalStyles.length; ss++)
-		document.head.removeChild(additionalStyles[ss]);
+    for (var ss = 0; ss < additionalStyles.length; ss++)
+        document.head.removeChild(additionalStyles[ss]);
 
     element.offsetHeight;
 }
@@ -253,6 +253,7 @@ let getSelectedGenerations = function () {
 
 let runAll = function () {
     let generations = getSelectedGenerations();
+    let addForcedCascade = $("addForcedCascade").checked;
     let totalElapsed = 0;
     let resultsTable = {};
     latestResultValue.textContent = "Please wait, while we " +
@@ -264,9 +265,16 @@ let runAll = function () {
             if (generations.indexOf(testCaseGeneration) !== -1) {
                 resultsTable[section] = {};
                 buttons.forEach(button => {
-                    let latestResult = runTestCase(section, button, true);
-                    resultsTable[section][button] = latestResult;
-                    totalElapsed += latestResult;
+
+                    if (!addForcedCascade &&
+                        button == "cellAuthorRule") {
+                        // do nothing
+                    } else {
+                        let latestResult = runTestCase(section, button, true);
+                        resultsTable[section][button] = latestResult;
+                        totalElapsed += latestResult;
+                    }
+                    
                 })
             }
         })
