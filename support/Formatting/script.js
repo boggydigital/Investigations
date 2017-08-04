@@ -40,6 +40,7 @@ sectionNamesMap.set("setThenClearId", "Set and clear #id");
 sectionNamesMap.set("setAttributeValue", "Set [attribute=value]");
 sectionNamesMap.set("setThenRemoveAttribute", "Set and remove [attribute]");
 sectionNamesMap.set("focus", "focus()");
+sectionNamesMap.set("pseudoElementFocus", "focus() with :focus::pseudo-element rule")
 sectionNamesMap.set("setCssTextSame", "Set .cssText to the same value");
 sectionNamesMap.set("setTransformThenGetTransformOrigin", "Set transform and get transformOrigin");
 
@@ -64,10 +65,17 @@ let cleanupAfterTestCase = (context) => {
     container.className = "";
     container.removeAttribute("data-attr");
 
+    let additionalStyles = document.head.querySelectorAll("style");
+	for (var ss = 0; ss < additionalStyles.length; ss++)
+		document.head.removeChild(additionalStyles[ss]);
+
     element.offsetHeight;
 }
 
 let runTestCase = function (testAction, testParam, manualRun) {
+
+    let setupAction = setupActionsMap.get(testAction);
+    if (setupAction) setupAction(testParam);
 
     let start = performance.now();
     let action = actionsMap.get(testAction);
@@ -93,6 +101,18 @@ let getElementByContext = (context) => {
         case "columnAuthorRule": return column;
         case "cellAuthorRule": return cell;
     }
+}
+
+let addStyleRuleHelper = (cssRule) => {
+    let style = document.createElement('style');
+    style.type = 'text/css';
+    style.appendChild(document.createTextNode(cssRule));
+    document.head.appendChild(style);
+}
+
+let addFocusPseudoElementRule = (context) => {
+    addStyleRuleHelper(":focus::-webkit-input-placeholder { color: black; }");
+    document.body.offsetHeight;
 }
 
 let addClass = (cl) => {
@@ -128,20 +148,6 @@ let setThenRemoveAttribute = (val) => {
     cell.offsetHeight;
 }
 
-// let insertThenRemoveChild = (context) => {
-//     insertBefore(context);
-//     cell.offsetHeight;
-//     var element = container.parentNode.querySelector(context);
-//     container.parentNode.removeChild(element);
-//     cell.offsetHeight;
-// }
-
-// let insertBefore = (context) => {
-//     let newNode = document.createElement(context);
-//     container.parentNode.insertBefore(newNode, container);
-//     cell.offsetHeight;
-// }
-
 let focus = (context) => {
     addClass(context);
     container.focus();
@@ -162,6 +168,9 @@ let setTransformThenGetTransformOrigin = (context) => {
     }
 }
 
+let setupActionsMap = new Map();
+setupActionsMap.set("pseudoElementFocus", addFocusPseudoElementRule);
+
 let actionsMap = new Map();
 actionsMap.set("addClass", addClass);
 actionsMap.set("addThenRemoveClass", addThenRemoveClass);
@@ -170,6 +179,7 @@ actionsMap.set("setThenClearId", setThenClearId);
 actionsMap.set("setAttributeValue", setAttributeValue);
 actionsMap.set("setThenRemoveAttribute", setThenRemoveAttribute);
 actionsMap.set("focus", focus);
+actionsMap.set("pseudoElementFocus", focus); // the actual test case is the same, the difference comes from additional style rule added with setupActions
 actionsMap.set("setCssTextSame", setCssTextSame);
 actionsMap.set("setTransformThenGetTransformOrigin", setTransformThenGetTransformOrigin);
 
@@ -181,6 +191,7 @@ generationsMap.set("setThenClearId", 1);
 generationsMap.set("setAttributeValue", 1);
 generationsMap.set("setThenRemoveAttribute", 1);
 generationsMap.set("focus", 1);
+generationsMap.set("pseudoElementFocus", 1);
 generationsMap.set("setCssTextSame", 2);
 generationsMap.set("setTransformThenGetTransformOrigin", 2);
 
@@ -210,7 +221,9 @@ let createTestCasesControlPanel = function () {
         let section = document.createElement("section");
         section.id = s;
         let header = document.createElement("h1");
-        header.textContent = sectionNamesMap.get(s);
+        let sectionTitle = sectionNamesMap.get(s);
+        if (!sectionTitle) alert("Unknown section " + s + ", did you add it to sectionNamesMap?");
+        header.textContent = sectionTitle;
         section.appendChild(header);
         let generation = generationsMap.get(s);
 

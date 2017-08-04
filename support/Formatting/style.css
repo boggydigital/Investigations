@@ -126,10 +126,6 @@ table tr:nth-child(even) {
     outline: solid yellow;
 }
 
-/*containerAuthorRule~#container {
-    outline: solid yellow;
-}*/
-
 .containerAuthorRule:focus {
     outline: solid yellow;
 }
@@ -142,10 +138,6 @@ table tr:nth-child(even) {
 [data-attr='rowAuthorRule'] .row {
     outline: solid cyan;
 }
-
-/*rowAuthorRule~#container .row {
-    outline: solid cyan;
-}*/
 
 .rowAuthorRule:focus .row {
     outline: solid cyan;
@@ -174,10 +166,6 @@ table tr:nth-child(even) {
 [data-attr='cellAuthorRule'] .cell {
     background: black;
 }
-
-/*childAuthorRule~#container .cell {
-    background: orange;
-}*/
 
 .cellAuthorRule:focus .cell {
     background: black;
