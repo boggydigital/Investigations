@@ -198,8 +198,10 @@ generationsMap.set("setTransformThenGetTransformOrigin", 2);
 let createGenerationsControls = function (selected) {
     let generations = [];
     let generationsControls = $("generationsControls");
-    for (let value of generationsMap.values())
+    generationsMap.forEach((value, key) => {
         if (generations.indexOf(value) === -1) generations.push(value);
+    });
+
 
     generations.forEach(generation => {
         let generationId = "gen" + generation;
@@ -241,8 +243,10 @@ let getSelectedGenerations = function () {
     let generations = [];
     let generationCheckboxes = document.querySelectorAll("#generationsControls input[type='checkbox']");
 
-    for (let checkbox of generationCheckboxes)
+    for (let cc = 0; cc < generationCheckboxes.length; cc++) {
+        let checkbox = generationCheckboxes[cc];
         if (checkbox.checked) generations.push(parseInt(checkbox.getAttribute("data-generation")));
+    }
 
     return generations;
 }
@@ -251,20 +255,22 @@ let runAll = function () {
     let generations = getSelectedGenerations();
     let totalElapsed = 0;
     let resultsTable = {};
-    latestResultValue.textContent = "Please wait running all cases for selected generation(s)...";
+    latestResultValue.textContent = "Please wait, while we " +
+        $("runAll").textContent.toLowerCase() +
+        "...";
     setTimeout(() => {
-        for (let section of sections) {
+        sections.forEach(section => {
             let testCaseGeneration = generationsMap.get(section);
-            if (generations.indexOf(testCaseGeneration) === -1) continue;
-            resultsTable[section] = {};
-            for (let button of buttons) {
-                let latestResult = runTestCase(section, button, true);
-                resultsTable[section][button] = latestResult;
-                totalElapsed += latestResult;
+            if (generations.indexOf(testCaseGeneration) !== -1) {
+                resultsTable[section] = {};
+                buttons.forEach(button => {
+                    let latestResult = runTestCase(section, button, true);
+                    resultsTable[section][button] = latestResult;
+                    totalElapsed += latestResult;
+                })
             }
-        }
+        })
         latestResultValue.textContent = totalElapsed.toFixed(2);
-        // TODO: replace this with DOM output
         outputRunAllResultsTable(resultsTable);
     }, 100);
 }
@@ -327,13 +333,17 @@ let addButtonsEventListeners = function () {
 
 let checkBasicConsistency = function () {
     let length = sectionNamesMap.size;
+    let result = "";
+
     if (actionsMap.size !== length ||
         generationsMap.size !== length)
-        return "actionsMap or generationsMap size is differnt from sectionNamesMap size.\n" +
+        result += "actionsMap or generationsMap size is differnt from sectionNamesMap size.\n" +
             "Did you add new case to all of the maps?";
 
-    for (let key of sectionNamesMap.keys()) {
-        if (!actionsMap.get(key)) return "actionsMap doesn't contain " + key;
-        if (!generationsMap.get(key)) return "generationsMap doesn't contain " + key;
-    }
+    sectionNamesMap.forEach((value, key) => {
+        if (!actionsMap.get(key)) result += "actionsMap doesn't contain " + key;
+        if (!generationsMap.get(key)) result += "generationsMap doesn't contain " + key;
+    })
+
+    return result;
 }
