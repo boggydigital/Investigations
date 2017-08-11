@@ -35,11 +35,11 @@ let createInitialStructure = function (rows, columns, cells) {
 
 let sectionNamesMap = new Map();
 sectionNamesMap.set("addClass", "Add .class");
-sectionNamesMap.set("addThenRemoveClass", "Add and remove .class");
+sectionNamesMap.set("removeClass", "Remove .class");
 sectionNamesMap.set("setId", "Set #id");
-sectionNamesMap.set("setThenClearId", "Set and clear #id");
+sectionNamesMap.set("clearId", "Clear #id");
 sectionNamesMap.set("setAttributeValue", "Set [attribute=value]");
-sectionNamesMap.set("setThenRemoveAttribute", "Set and remove [attribute]");
+sectionNamesMap.set("removeAttribute", "Remove [attribute]");
 sectionNamesMap.set("focus", "focus()");
 sectionNamesMap.set("pseudoElementFocus", "focus() with :focus::pseudo-element rule")
 sectionNamesMap.set("setCssTextSame", "Set .cssText to the same value");
@@ -128,8 +128,7 @@ let addClass = (cl) => {
     cell.offsetHeight;
 }
 
-let addThenRemoveClass = (cl) => {
-    addClass(cl);
+let removeClass = (cl) => {
     container.classList.remove(cl);
     cell.offsetHeight;
 }
@@ -139,8 +138,7 @@ let setId = (id) => {
     cell.offsetHeight;
 }
 
-let setThenClearId = (id) => {
-    setId(id);
+let clearId = (id) => {
     container.id = "container";
     cell.offsetHeight;
 }
@@ -150,8 +148,7 @@ let setAttributeValue = (val) => {
     cell.offsetHeight;
 }
 
-let setThenRemoveAttribute = (val) => {
-    setAttributeValue(val);
+let removeAttribute = (val) => {
     container.removeAttribute("data-attr");
     cell.offsetHeight;
 }
@@ -176,16 +173,19 @@ let setTransformThenGetTransformOrigin = (context) => {
 }
 
 let setupActionsMap = new Map();
+setupActionsMap.set("removeClass", addClass);
+setupActionsMap.set("clearId", setId);
+setupActionsMap.set("removeAttribute", setAttributeValue);
 setupActionsMap.set("focus", addClassBeforeFocus);
 setupActionsMap.set("pseudoElementFocus", addFocusPseudoElementRule);
 
 let actionsMap = new Map();
 actionsMap.set("addClass", addClass);
-actionsMap.set("addThenRemoveClass", addThenRemoveClass);
+actionsMap.set("removeClass", removeClass);
 actionsMap.set("setId", setId);
-actionsMap.set("setThenClearId", setThenClearId);
+actionsMap.set("clearId", clearId);
 actionsMap.set("setAttributeValue", setAttributeValue);
-actionsMap.set("setThenRemoveAttribute", setThenRemoveAttribute);
+actionsMap.set("removeAttribute", removeAttribute);
 actionsMap.set("focus", focus);
 actionsMap.set("pseudoElementFocus", focus); // the actual test case is the same, the difference comes from additional style rule added with setupActions
 actionsMap.set("setCssTextSame", setCssTextSame);
@@ -193,13 +193,13 @@ actionsMap.set("setTransformThenGetTransformOrigin", setTransformThenGetTransfor
 
 let generationsMap = new Map();
 generationsMap.set("addClass", 1);
-generationsMap.set("addThenRemoveClass", 1);
+generationsMap.set("removeClass", 1);
 generationsMap.set("setId", 1);
-generationsMap.set("setThenClearId", 1);
+generationsMap.set("clearId", 1);
 generationsMap.set("focus", 2);
 generationsMap.set("pseudoElementFocus", 2);
 generationsMap.set("setAttributeValue", 3);
-generationsMap.set("setThenRemoveAttribute", 3);
+generationsMap.set("removeAttribute", 3);
 generationsMap.set("setCssTextSame", 4);
 generationsMap.set("setTransformThenGetTransformOrigin", 4);
 
