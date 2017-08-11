@@ -7,18 +7,28 @@
 </head>
 
 <body data-revision="20170810">
+    <section id="generationColors">
+        <span class="gen1"></span>
+        <span class="gen2"></span>
+        <span class="gen3"></span>
+        <span class="gen4"></span>
+        <span class="gen5"></span>
+        <span class="gen6"></span>
+        <span class="gen7"></span>
+    </section>
+
     <header id="results">
-        <input type="text" id="focusReceiver" />
-        <h1 id="generationsLabel">Generations:</h1>
+        <h1 id="generationsLabel">Generations</h1>
         <span id="generationsControls"></span>
         <button id="runAll">Run all cases for selected generation(s)</button>
+        <input type="text" id="focusReceiver" />
         <section id="latestResult">
             <h1>Latest result</h1>
             <time id="latestResultValue">0.0</time>
         </section>
         <table id="detailedRunAllResults"></table>
     </header>
-     <article id="testCases" data-sections="addClass,removeClass,setId,clearId,focus,pseudoElementFocus,setAttributeValue,removeAttribute,setCssTextSame,setTransformThenGetTransformOrigin" 
+    <article id="testCases" data-sections="addClass,removeClass,setId,clearId,focus,pseudoElementFocus,setAttributeValue,removeAttribute,setCssTextSame,setTransformThenGetTransformOrigin"
         data-buttons="noAuthorRule,containerAuthorRule,rowAuthorRule,columnAuthorRule,cellAuthorRule">
     </article>
 
@@ -34,7 +44,7 @@
             } else {
                 createInitialStructure(50, 50, 50);
                 createTestCasesControlPanel();
-                createGenerationsControls([1,2,3]); // only run generation 1,2 tests by default
+                createGenerationsControls([1, 2, 3]); // only run generation 1,2 tests by default
                 addButtonsEventListeners();
             }
         });

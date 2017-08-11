@@ -41,7 +41,7 @@ sectionNamesMap.set("clearId", "Clear #id");
 sectionNamesMap.set("setAttributeValue", "Set [attribute=value]");
 sectionNamesMap.set("removeAttribute", "Remove [attribute]");
 sectionNamesMap.set("focus", "focus()");
-sectionNamesMap.set("pseudoElementFocus", "focus() with :focus::pseudo-element rule")
+sectionNamesMap.set("pseudoElementFocus", "focus() with :focus::pseudo rule")
 sectionNamesMap.set("setCssTextSame", "Set .cssText to the same value");
 sectionNamesMap.set("setTransformThenGetTransformOrigin", "Set transform and get transformOrigin");
 

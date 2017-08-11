@@ -1,5 +1,9 @@
 /* Start: User interface styles, won't affect benchmark results */
 
+:root {
+    --border-radius: 3px;
+}
+
 html {
     font-size: 14px
 }
@@ -12,11 +16,31 @@ body {
 
 article#testCases {
     margin: 1em;
+    background: rgb(240, 240, 240);
+    border-radius: var(--border-radius);
+    padding: 1em 0 1em 0;
 }
 
 header#results {
     background: inherit;
     padding: 1rem;
+    padding-bottom: 0;
+}
+
+#generationColors
+{
+    height: 5px;
+    width: 100%;
+    display: flex;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+#generationColors span {
+    height: 100%;
+    width: calc(100%/7);
+    display: inline-block;
 }
 
 header #generationsLabel {
@@ -24,25 +48,44 @@ header #generationsLabel {
 }
 
 header #generationsControls label {
-    padding: 0.25em;
+    padding: 0.5em;
+    vertical-align: middle;
+}
+
+header #generationsControls label:first-child {
+    border-radius: var(--border-radius) 0 0 var(--border-radius);
+}
+
+header #generationsControls label:last-child {
+    border-radius: 0 var(--border-radius) var(--border-radius) 0;
 }
 
 button {
     padding: 0.5em;
-    border: solid 2px black;
-    border-radius: 2px;
+    border: solid 2px rgb(75,75,75);
+    border-radius: var(--border-radius);
+    vertical-align: middle;
+}
+
+button#runAll {
+    background: black;
+    color: white;
 }
 
 #latestResult {
     line-height: 2;
+
 }
 
 time#latestResultValue {
     background: black;
     color: white;
     padding: 0.25rem; 
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;    
     font-weight: 600;
     font-size: 1.75em;
+    border-radius: var(--border-radius);
 }
 
 p#queryParametersHelp {
@@ -56,23 +99,27 @@ p#queryParametersHelp {
 h1 {
     font-size: 1rem;
     display: inline-block;
-    width: 15em;
+    width: 20em;
+    font-weight: 600;
+    text-align: right;
+    padding-right: 2em;
     /* should move to Grid as it hits main */
 }
 
 section button {
-     margin-right: 1em; 
+     margin-right: 0.75em; 
 }
 
 table th {
     padding: 1em;
+    font-weight: 600;
 }
 table td {
     text-align: center;
 }
 
 table td:last-child {
-    font-weight: bold;
+    font-weight: 600;
     background: gray;
     color: white;
 }
@@ -84,41 +131,41 @@ table tr:nth-child(even) {
 input[type=text]#focusReceiver {
     width: 0;
     height: 0;
+    margin: 0;
+    padding: 0;
 }
 
 /* End: User interface styles, won't affect benchmark results */
 /* Start: Generations styling, won't affect benchmark results */
 
 .gen1 {
-    background: red;
+    background: #EA5546;
     color: white;
 }
 
 .gen2 {
-    background: orange;
+    background: #F9A228;
 }
 
 .gen3 {
-    background: yellow;
+    background: #FECC2F;
 }
 
 .gen4 {
-    background: green;
+    background: #6BC078;
     color: white;
 }
 
 .gen5 {
-    background: lightblue;
+    background: #33BEB8;
 }
 
 .gen6 {
-    background: blue;
-    color: white;
+    background: #40A4D8;
 }
 
 .gen7 {
-    background: purple;
-    color: white;
+    background: #A363D8;
 }
 
 /* End: Generations styling, won't affect benchmark results */
@@ -129,7 +176,7 @@ input[type=text]#focusReceiver {
     background: blue;
     width: 1px;
     height: 1px;
-    margin-right: 1px;
+     margin-right: 1px; 
     vertical-align: top;
 }
 
@@ -188,10 +235,10 @@ input[type=text]#focusReceiver {
 .cellAuthorRule .cell,
 #cellAuthorRule .cell,
 [data-attr='cellAuthorRule'] .cell {
-    background: black;
+    background: magenta;
 }
 
 .cellAuthorRule:focus .cell {
-    background: black;
+    background: magenta;
 }
 /* End: Style rule that affects cells */
