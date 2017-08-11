@@ -6,21 +6,19 @@
     <link rel="stylesheet" href="support/Formatting/style.css" type="text/css" />
 </head>
 
-<body>
+<body data-revision="20170810">
     <header id="results">
         <input type="text" id="focusReceiver" />
         <h1 id="generationsLabel">Generations:</h1>
         <span id="generationsControls"></span>
         <button id="runAll">Run all cases for selected generation(s)</button>
-        <input type="checkbox" checked="checked" id="addForcedCascade">
-        <label for="addForcedCascade">Add forced cascade</label>
         <section id="latestResult">
             <h1>Latest result</h1>
             <time id="latestResultValue">0.0</time>
         </section>
         <table id="detailedRunAllResults"></table>
     </header>
-    <article id="testCases" data-sections="addClass,removeClass,setId,clearId,focus,pseudoElementFocus,setAttributeValue,removeAttribute,setCssTextSame,setTransformThenGetTransformOrigin"
+     <article id="testCases" data-sections="addClass,removeClass,setId,clearId,focus,pseudoElementFocus,setAttributeValue,removeAttribute,setCssTextSame,setTransformThenGetTransformOrigin" 
         data-buttons="noAuthorRule,containerAuthorRule,rowAuthorRule,columnAuthorRule,cellAuthorRule">
     </article>
 

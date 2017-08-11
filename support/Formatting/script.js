@@ -73,25 +73,23 @@ let cleanupAfterTestCase = (context) => {
     focusReceiver.focus();
 
     element.offsetHeight;
+    cell.offsetHeight;
 }
 
-let runTestCase = function (testAction, testParam, manualRun) {
+let runTestCase = function (testAction, testParam, cleanup, outputResult) {
 
     let setupAction = setupActionsMap.get(testAction);
     if (setupAction) setupAction(testParam);
 
-    let start = performance.now();
     let action = actionsMap.get(testAction);
     if (!action) alert("Test case not found, make sure it's added to actionsMap!");
 
+    let start = performance.now();
     action(testParam);
-
     let elapsed = performance.now() - start;
 
-    if (manualRun) {
-        cleanupAfterTestCase(testParam);
-        latestResultValue.textContent = elapsed.toFixed(2);
-    }
+    if (cleanup) cleanupAfterTestCase(testParam);
+    if (outputResult) latestResultValue.textContent = elapsed.toFixed(2);
 
     return elapsed;
 }
@@ -261,7 +259,6 @@ let getSelectedGenerations = function () {
 
 let runAll = function () {
     let generations = getSelectedGenerations();
-    let addForcedCascade = $("addForcedCascade").checked;
     let totalElapsed = 0;
     let resultsTable = {};
     latestResultValue.textContent = "Please wait, while we " +
@@ -273,16 +270,9 @@ let runAll = function () {
             if (generations.indexOf(testCaseGeneration) !== -1) {
                 resultsTable[section] = {};
                 buttons.forEach(button => {
-
-                    if (!addForcedCascade &&
-                        button == "cellAuthorRule") {
-                        // do nothing
-                    } else {
-                        let latestResult = runTestCase(section, button, true);
-                        resultsTable[section][button] = latestResult;
-                        totalElapsed += latestResult;
-                    }
-
+                    let latestResult = runTestCase(section, button, true, false);
+                    resultsTable[section][button] = latestResult;
+                    totalElapsed += latestResult;
                 })
             }
         })
@@ -343,7 +333,7 @@ let addButtonsEventListeners = function () {
                 runAll();
                 return;
             }
-            runTestCase(e.target.parentNode.id, e.target.textContent, true);
+            runTestCase(e.target.parentNode.id, e.target.textContent, true, true);
             detailedRunAllResults.innerHTML = "";
         });
 };
