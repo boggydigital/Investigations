@@ -196,12 +196,12 @@ generationsMap.set("addClass", 1);
 generationsMap.set("addThenRemoveClass", 1);
 generationsMap.set("setId", 1);
 generationsMap.set("setThenClearId", 1);
-generationsMap.set("focus", 1);
-generationsMap.set("pseudoElementFocus", 1);
-generationsMap.set("setAttributeValue", 2);
-generationsMap.set("setThenRemoveAttribute", 2);
-generationsMap.set("setCssTextSame", 3);
-generationsMap.set("setTransformThenGetTransformOrigin", 3);
+generationsMap.set("focus", 2);
+generationsMap.set("pseudoElementFocus", 2);
+generationsMap.set("setAttributeValue", 3);
+generationsMap.set("setThenRemoveAttribute", 3);
+generationsMap.set("setCssTextSame", 4);
+generationsMap.set("setTransformThenGetTransformOrigin", 4);
 
 let createGenerationsControls = function (selected) {
     let generations = [];
