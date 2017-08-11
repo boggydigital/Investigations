@@ -3,6 +3,7 @@ let $ = function (id) { return document.getElementById(id); }
 let container = $("container");
 let latestResultValue = $("latestResultValue");
 let detailedRunAllResults = $("detailedRunAllResults");
+let focusReceiver = $("focusReceiver");
 let articleTestCases = document.querySelector("article#testCases");
 let sections = articleTestCases.getAttribute("data-sections").split(",");
 let buttons = articleTestCases.getAttribute("data-buttons").split(",");
@@ -69,6 +70,8 @@ let cleanupAfterTestCase = (context) => {
     for (var ss = 0; ss < additionalStyles.length; ss++)
         document.head.removeChild(additionalStyles[ss]);
 
+    focusReceiver.focus();
+
     element.offsetHeight;
 }
 
@@ -115,6 +118,11 @@ let addFocusPseudoElementRule = (context) => {
     document.body.offsetHeight;
 }
 
+let addClassBeforeFocus = (context) => {
+    addClass(context);
+    cell.offsetHeight;
+}
+
 let addClass = (cl) => {
     container.classList.add(cl);
     cell.offsetHeight;
@@ -149,7 +157,6 @@ let setThenRemoveAttribute = (val) => {
 }
 
 let focus = (context) => {
-    addClass(context);
     container.focus();
     cell.offsetHeight;
 }
@@ -169,6 +176,7 @@ let setTransformThenGetTransformOrigin = (context) => {
 }
 
 let setupActionsMap = new Map();
+setupActionsMap.set("focus", addClassBeforeFocus);
 setupActionsMap.set("pseudoElementFocus", addFocusPseudoElementRule);
 
 let actionsMap = new Map();
@@ -280,6 +288,7 @@ let runAll = function () {
         })
         latestResultValue.textContent = totalElapsed.toFixed(2);
         outputRunAllResultsTable(resultsTable);
+        console.table(resultsTable);
     }, 100);
 }
 

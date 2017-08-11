@@ -81,6 +81,11 @@ table tr:nth-child(even) {
     background: silver;
 }
 
+input[type=text]#focusReceiver {
+    width: 0;
+    height: 0;
+}
+
 /* End: User interface styles, won't affect benchmark results */
 /* Start: Generations styling, won't affect benchmark results */
 
@@ -95,6 +100,25 @@ table tr:nth-child(even) {
 
 .gen3 {
     background: yellow;
+}
+
+.gen4 {
+    background: green;
+    color: white;
+}
+
+.gen5 {
+    background: lightblue;
+}
+
+.gen6 {
+    background: blue;
+    color: white;
+}
+
+.gen7 {
+    background: purple;
+    color: white;
 }
 
 /* End: Generations styling, won't affect benchmark results */
@@ -123,11 +147,11 @@ table tr:nth-child(even) {
 .containerAuthorRule,
 #containerAuthorRule,
 [data-attr='containerAuthorRule'] {
-    outline: solid yellow;
+    background: yellow;
 }
 
 .containerAuthorRule:focus {
-    outline: solid yellow;
+    background: yellow;
 }
 /* End: Style rule that affects container only, and doesn't affect children */
 
@@ -136,11 +160,11 @@ table tr:nth-child(even) {
 .rowAuthorRule .row,
 #rowAuthorRule .row,
 [data-attr='rowAuthorRule'] .row {
-    outline: solid cyan;
+    background: cyan;
 }
 
 .rowAuthorRule:focus .row {
-    outline: solid cyan;
+    background: cyan;
 }
 
 /* End: Style rules that affect rows - sub-case for container */
@@ -150,11 +174,11 @@ table tr:nth-child(even) {
 .columnAuthorRule .column,
 #columnAuthorRule .column,
 [data-attr='column'] .column {
-    outline: solid pink;
+    background: pink;
 }
 
 .columnAuthorRule:focus .column {
-    outline: solid pink;
+    background: pink;
 }
 
 /* End: Style rules that affect columns - sub-case for containers */
