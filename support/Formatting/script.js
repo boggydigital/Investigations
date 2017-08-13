@@ -1,15 +1,30 @@
 let $ = function (id) { return document.getElementById(id); }
 
 let container = $("container");
+let latestTestValue = $("latestTestValue");
 let latestResultValue = $("latestResultValue");
 let detailedRunAllResults = $("detailedRunAllResults");
 let focusReceiver = $("focusReceiver");
-let articleTestCases = document.querySelector("article#testCases");
-let sections = articleTestCases.getAttribute("data-sections").split(",");
-let buttons = articleTestCases.getAttribute("data-buttons").split(",");
+let detailsManualControls = document.querySelector("details#manualControls");
+let sections = detailsManualControls.getAttribute("data-sections").split(",");
+let buttons = detailsManualControls.getAttribute("data-buttons").split(",");
+let manualControlsContainer = detailsManualControls.querySelector("#manualControlsContainer");
 let column, row, cell, firstRow;
 
-let createInitialStructure = function (rows, columns, cells) {
+let createInitialStructure = function (options) {
+
+    let rows = 0, columns = 0, cells = 0;
+    let defaultDepth = 50;
+
+    if (!options) {
+        rows = defaultDepth;
+        columns = defaultDepth;
+        cells = defaultDepth;
+    } else {
+        rows = (options.rows) ? options.rows : defaultDepth;
+        columns = (options.columns) ? options.columns : defaultDepth;
+        cells = (options.cells) ? options.cells : defaultDepth;
+    }
 
     for (let rr = 0; rr < rows; rr++) {
         let testRow = document.createElement("div");
@@ -76,7 +91,7 @@ let cleanupAfterTestCase = (context) => {
     cell.offsetHeight;
 }
 
-let runTestCase = function (testAction, testParam, cleanup, outputResult) {
+let runTestCase = function (testAction, testParam, cleanup) {
 
     let setupAction = setupActionsMap.get(testAction);
     if (setupAction) setupAction(testParam);
@@ -89,7 +104,6 @@ let runTestCase = function (testAction, testParam, cleanup, outputResult) {
     let elapsed = performance.now() - start;
 
     if (cleanup) cleanupAfterTestCase(testParam);
-    if (outputResult) latestResultValue.textContent = elapsed.toFixed(2);
 
     return elapsed;
 }
@@ -201,7 +215,7 @@ generationsMap.set("removeAttribute", 3);
 generationsMap.set("setCssTextSame", 4);
 generationsMap.set("setTransformThenGetTransformOrigin", 4);
 
-let createGenerationsControls = function (selected) {
+let createGenerationsControls = function (options) {
     let generations = [];
     let generationsControls = $("generationsControls");
     generationsMap.forEach((value, key) => {
@@ -216,7 +230,7 @@ let createGenerationsControls = function (selected) {
         generationLabel.classList.add(generationId);
         let generationCheckbox = document.createElement("input");
         generationCheckbox.type = "checkbox";
-        if (selected.indexOf(generation) > -1) generationCheckbox.checked = true;
+        if (options && options.selectGenerations.indexOf(generation) > -1) generationCheckbox.checked = true;
         generationCheckbox.id = generationId;
         generationCheckbox.setAttribute("data-generation", generation);
         generationLabel.appendChild(generationCheckbox);
@@ -224,7 +238,7 @@ let createGenerationsControls = function (selected) {
     })
 }
 
-let createTestCasesControlPanel = function () {
+let createManualControls = function (options) {
     sections.forEach(s => {
         let section = document.createElement("section");
         section.id = s;
@@ -241,8 +255,9 @@ let createTestCasesControlPanel = function () {
             button.classList.add("gen" + generation);
             section.appendChild(button);
         });
-        articleTestCases.appendChild(section);
+        manualControlsContainer.appendChild(section);
     });
+    if (options && options.addEventListeners) addManualControlsEventListeners();
 }
 
 let getSelectedGenerations = function () {
@@ -261,25 +276,26 @@ let runAll = function () {
     let generations = getSelectedGenerations();
     let totalElapsed = 0;
     let resultsTable = {};
-    latestResultValue.textContent = "Please wait, while we " +
-        $("runAll").textContent.toLowerCase() +
-        "...";
+    latestTestValue.textContent = "Please wait, while we " +
+        $("runAll").textContent.toLowerCase();
+    latestResultValue.textContent = "(running...)";
     setTimeout(() => {
         sections.forEach(section => {
             let testCaseGeneration = generationsMap.get(section);
             if (generations.indexOf(testCaseGeneration) !== -1) {
                 resultsTable[section] = {};
                 buttons.forEach(button => {
-                    let latestResult = runTestCase(section, button, true, false);
+                    let latestResult = runTestCase(section, button, true);
                     resultsTable[section][button] = latestResult;
                     totalElapsed += latestResult;
                 })
             }
         })
+        latestTestValue.textContent = "All test cases for selected generation(s)";
         latestResultValue.textContent = totalElapsed.toFixed(2);
         outputRunAllResultsTable(resultsTable);
         console.table(resultsTable);
-    }, 100);
+    }, 50);
 }
 
 let outputRunAllResultsTable = function (data) {
@@ -325,20 +341,32 @@ let outputRunAllResultsTable = function (data) {
     }
 }
 
-let addButtonsEventListeners = function () {
+let addManualControlsEventListeners = function () {
     let buttons = document.querySelectorAll("button");
     for (let ii = 0; ii < buttons.length; ii++)
         buttons[ii].addEventListener("click", function (e) {
+
             if (e.target.id === "runAll") {
                 runAll();
                 return;
             }
-            runTestCase(e.target.parentNode.id, e.target.textContent, true, true);
+
+            let testCase = e.target.parentNode.id;
+            let testParam = e.target.textContent;
+
             detailedRunAllResults.innerHTML = "";
+            latestTestValue.textContent = sectionNamesMap.get(testCase) + " + " + testParam;
+            latestResultValue.textContent = "(running...)";
+
+            setTimeout(() => {
+                let latestResult = runTestCase(testCase, testParam, true)
+                latestResultValue.textContent = latestResult.toFixed(2);
+            }, 50);
+
         });
 };
 
-let checkBasicConsistency = function () {
+let checkConsistency = function () {
     let length = sectionNamesMap.size;
     let result = "";
 
