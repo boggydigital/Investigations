@@ -60,6 +60,13 @@ sectionNamesMap.set("pseudoElementFocus", "focus() with :focus::pseudo rule")
 sectionNamesMap.set("setCssTextSame", "Set .cssText to the same value");
 sectionNamesMap.set("setTransformThenGetTransformOrigin", "Set transform and get transformOrigin");
 
+let contextNamesMap = new Map();
+contextNamesMap.set("noAuthorRule", "NONE");
+contextNamesMap.set("containerAuthorRule", "ONE");
+contextNamesMap.set("rowAuthorRule", "FEW");
+contextNamesMap.set("columnAuthorRule", "MANY");
+contextNamesMap.set("cellAuthorRule", "ALL");
+
 let getClassByContext = (context) => {
     switch (context) {
         case "noAuthorRule": return ""; // this is redundant in this case, but added just for consistency
@@ -251,7 +258,8 @@ let createManualControls = function (options) {
 
         buttons.forEach(b => {
             let button = document.createElement("button");
-            button.textContent = b;
+            button.textContent = contextNamesMap.get(b);
+            button.setAttribute("data-value", b);
             button.classList.add("gen" + generation);
             section.appendChild(button);
         });
@@ -308,7 +316,7 @@ let outputRunAllResultsTable = function (data) {
             tableHead.appendChild(document.createElement("th"))
             for (let column in data[row]) {
                 let columnHeader = document.createElement("th");
-                columnHeader.innerHTML = column;
+                columnHeader.innerHTML = contextNamesMap.get(column);
                 tableHead.appendChild(columnHeader);
             }
             let sumHeader = document.createElement("th");
@@ -352,10 +360,12 @@ let addManualControlsEventListeners = function () {
             }
 
             let testCase = e.target.parentNode.id;
-            let testParam = e.target.textContent;
+            let testParam = e.target.getAttribute("data-value");
 
             detailedRunAllResults.innerHTML = "";
-            latestTestValue.textContent = sectionNamesMap.get(testCase) + " + " + testParam;
+            latestTestValue.textContent =
+                "Modification: " + sectionNamesMap.get(testCase) +
+                "; affects: " + contextNamesMap.get(testParam);
             latestResultValue.textContent = "(running...)";
 
             setTimeout(() => {

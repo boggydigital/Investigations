@@ -113,12 +113,28 @@ section button {
      margin-right: 0.75em; 
 }
 
+table {
+    margin-top: 1em;
+}
+
 table th {
     padding: 1em;
     font-weight: 600;
+    background: gray;
+    color: white;
 }
+
+table th:first-child {
+    background: initial;
+}
+
+table tr td:first-child {
+    padding: 0;
+}
+
 table td {
     text-align: center;
+    padding: 0 1em 0 1em;
 }
 
 table td:last-child {
@@ -238,7 +254,7 @@ input[type=text]#focusReceiver {
 .cellAuthorRule .cell,
 #cellAuthorRule .cell,
 [data-attr='cellAuthorRule'] .cell {
-    background: magenta;
+    background-color: magenta;
 }
 
 .cellAuthorRule:focus .cell {
