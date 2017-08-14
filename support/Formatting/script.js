@@ -65,7 +65,7 @@ contextNamesMap.set("noAuthorRule", "NONE");
 contextNamesMap.set("containerAuthorRule", "ONE");
 contextNamesMap.set("rowAuthorRule", "FEW");
 contextNamesMap.set("columnAuthorRule", "MANY");
-contextNamesMap.set("cellAuthorRule", "ALL");
+contextNamesMap.set("cellAuthorRule", "MOST");
 
 let getClassByContext = (context) => {
     switch (context) {
@@ -284,8 +284,7 @@ let runAll = function () {
     let generations = getSelectedGenerations();
     let totalElapsed = 0;
     let resultsTable = {};
-    latestTestValue.textContent = "Please wait, while we " +
-        $("runAll").textContent.toLowerCase();
+    latestTestValue.textContent = "All selected";
     latestResultValue.textContent = "(running...)";
     setTimeout(() => {
         sections.forEach(section => {
@@ -299,7 +298,6 @@ let runAll = function () {
                 })
             }
         })
-        latestTestValue.textContent = "All test cases for selected generation(s)";
         latestResultValue.textContent = totalElapsed.toFixed(2);
         outputRunAllResultsTable(resultsTable);
         console.table(resultsTable);
