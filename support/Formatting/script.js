@@ -6,9 +6,9 @@ let latestResultValue = $("latestResultValue");
 let detailedRunAllResults = $("detailedRunAllResults");
 let focusReceiver = $("focusReceiver");
 let detailsManualControls = document.querySelector("details#manualControls");
-let sections = detailsManualControls.getAttribute("data-sections").split(",");
-let buttons = detailsManualControls.getAttribute("data-buttons").split(",");
-let manualControlsContainer = detailsManualControls.querySelector("#manualControlsContainer");
+let sections = detailsManualControls && detailsManualControls.getAttribute("data-sections").split(",");
+let buttons = detailsManualControls && detailsManualControls.getAttribute("data-buttons").split(",");
+let manualControlsContainer = detailsManualControls && detailsManualControls.querySelector("#manualControlsContainer");
 let column, row, cell, firstRow;
 
 let createInitialStructure = function (options) {
