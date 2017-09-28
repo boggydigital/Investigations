@@ -34,8 +34,7 @@ let createInitialStructure = function (options) {
             testColumn.className = "column";
             for (let cc = 0; cc < cells; cc++) {
                 let testCell = document.createElement("div");
-                // testCell.textContent = (rr * rows + cl * columns + cc);
-                testCell.className = "cell";// + (rr * rows + cl * columns + cc);
+                testCell.className = "cell";
                 testColumn.appendChild(testCell);
             }
             testRow.appendChild(testColumn);
@@ -98,19 +97,21 @@ let cleanupAfterTestCase = (context) => {
     cell.offsetHeight;
 }
 
-let runTestCase = function (testAction, testParam, cleanup) {
+let runTestCase = function (options) {
 
-    let setupAction = setupActionsMap.get(testAction);
-    if (setupAction) setupAction(testParam);
+    if (!options) NaN;
 
-    let action = actionsMap.get(testAction);
+    let setupAction = setupActionsMap.get(options.action);
+    if (setupAction) setupAction(options.parameter);
+
+    let action = actionsMap.get(options.action);
     if (!action) alert("Test case not found, make sure it's added to actionsMap!");
 
     let start = performance.now();
-    action(testParam);
+    action(options.parameter);
     let elapsed = performance.now() - start;
 
-    if (cleanup) cleanupAfterTestCase(testParam);
+    if (options.cleanup) cleanupAfterTestCase(options.parameter);
 
     return elapsed;
 }
@@ -229,7 +230,6 @@ let createGenerationsControls = function (options) {
         if (generations.indexOf(value) === -1) generations.push(value);
     });
 
-
     generations.forEach(generation => {
         let generationId = "gen" + generation;
         let generationLabel = document.createElement("label");
@@ -280,26 +280,35 @@ let getSelectedGenerations = function () {
     return generations;
 }
 
-let runAll = function () {
+let runAll = function (outputData) {
     let generations = getSelectedGenerations();
     let totalElapsed = 0;
     let resultsTable = {};
-    latestTestValue.textContent = "All selected";
-    latestResultValue.textContent = "(running...)";
+    if (outputData) {
+        latestTestValue.textContent = "All selected";
+        latestResultValue.textContent = "(running...)";
+    }
     setTimeout(() => {
         sections.forEach(section => {
             let testCaseGeneration = generationsMap.get(section);
             if (generations.indexOf(testCaseGeneration) !== -1) {
                 resultsTable[section] = {};
                 buttons.forEach(button => {
-                    let latestResult = runTestCase(section, button, true);
+                    let latestResult = runTestCase(
+                        {
+                            "action": section,
+                            "parameter": button,
+                            "cleanup": true
+                        });
                     resultsTable[section][button] = latestResult;
                     totalElapsed += latestResult;
                 })
             }
         })
-        latestResultValue.textContent = totalElapsed.toFixed(2);
-        outputRunAllResultsTable(resultsTable);
+        if (outputData) {
+            latestResultValue.textContent = totalElapsed.toFixed(2);
+            outputRunAllResultsTable(resultsTable);
+        }
         console.table(resultsTable);
     }, 50);
 }
@@ -353,7 +362,7 @@ let addManualControlsEventListeners = function () {
         buttons[ii].addEventListener("click", function (e) {
 
             if (e.target.id === "runAll") {
-                runAll();
+                runAll(true);
                 return;
             }
 
@@ -367,7 +376,12 @@ let addManualControlsEventListeners = function () {
             latestResultValue.textContent = "(running...)";
 
             setTimeout(() => {
-                let latestResult = runTestCase(testCase, testParam, true)
+                let latestResult = runTestCase(
+                    {
+                        "action": testCase,
+                        "parameter": testParam,
+                        "cleanup": true
+                    });
                 latestResultValue.textContent = latestResult.toFixed(2);
             }, 50);
 
