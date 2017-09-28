@@ -153,6 +153,11 @@ let removeClass = (cl) => {
     cell.offsetHeight;
 }
 
+let addThenRemoveClass = (cl) => {
+    addClass(cl);
+    removeClass(cl);
+}
+
 let setId = (id) => {
     container.id = id;
     cell.offsetHeight;
@@ -163,6 +168,12 @@ let clearId = (id) => {
     cell.offsetHeight;
 }
 
+
+let setThenClearId = (id) => {
+    setId(id);
+    clearId(id);
+}
+
 let setAttributeValue = (val) => {
     container.setAttribute("data-attr", val);
     cell.offsetHeight;
@@ -171,6 +182,12 @@ let setAttributeValue = (val) => {
 let removeAttribute = (val) => {
     container.removeAttribute("data-attr");
     cell.offsetHeight;
+}
+
+
+let setThenRemoveAttribute = (val) => {
+    setAttributeValue(val);
+    removeAttribute(val);
 }
 
 let focus = (context) => {
