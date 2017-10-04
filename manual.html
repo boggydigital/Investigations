@@ -3,7 +3,8 @@
 
 <head>
     <meta charset="utf-8" />
-    <link rel="stylesheet" href="support/Formatting/style.css" type="text/css" />
+    <link rel="stylesheet" href="support/Formatting/automated.css" type="text/css" />
+    <link rel="stylesheet" href="support/Formatting/manual.css" type="text/css" />    
 </head>
 
 <body data-revision="20170810">
@@ -32,15 +33,17 @@
         </section>
         <table id="detailedRunAllResults"></table>
     </header>
-    <details id="manualControls" data-sections="addClass,removeClass,setId,clearId,focus,pseudoElementFocus,setAttributeValue,removeAttribute,setCssTextSame,setTransformThenGetTransformOrigin"
-        data-buttons="noAuthorRule,containerAuthorRule,rowAuthorRule,columnAuthorRule,cellAuthorRule">
+    <details id="manualControls" data-actions="addClass,removeClass,setId,clearId,focus,pseudoElementFocus,setAttributeValue,removeAttribute,setCssTextSame,setTransformThenGetTransformOrigin"
+        data-parameters="noAuthorRule,containerAuthorRule,rowAuthorRule,columnAuthorRule,cellAuthorRule">
         <summary>Manual controls</summary>
         <article id="manualControlsContainer"></article>
     </details>
 
     <div id="container" tabindex="0"></div>
-    <script src="support/Formatting/script.js"></script>
-
+    
+    <script src="support/Formatting/automated.js"></script>
+    <script src="support/Formatting/manual.js"></script>
+    
     <script>
         document.addEventListener("DOMContentLoaded", () => {
 
