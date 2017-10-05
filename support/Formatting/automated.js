@@ -217,7 +217,8 @@ let extractActionParameterFromFilename = function (uri) {
         //   "parameter": "cellAuthorRule" }
         var strFilename = uri.substr(uri.lastIndexOf("/") + 1);
 
-        var matchResults = strFilename.match(/_(.*)-(.*).html/i);
+        var matchResults = strFilename.match(/([^_.]*)-(.*).html/i);
+        
         if (matchResults == null) throw "Failed to parse location.pathname:" + uri;
 
         return {
